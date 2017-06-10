@@ -1,7 +1,28 @@
 {
+  "entrypoint": "index.html",
+  "shell": "src/hn-pwa2-app/hn-pwa2-app.html",
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+
   "lint": {
     "rules": [
       "polymer-2"
     ]
-  }
+  },
+
+  "builds": [
+    {
+      "preset": "es5-bundled"
+    },
+    {
+      "preset": "es6-bundled"
+    }
+  ]
 }

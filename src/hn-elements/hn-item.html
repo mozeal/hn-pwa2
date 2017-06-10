@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="hn-item">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+
+            .a2 {
+                position: relative;
+                text-decoration: none;
+                color: inherit;
+                overflow: hidden;
+            }
+
+            .layout {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .num {
+                width: 30px;
+                float: left;
+                text-align: right;
+                height: 100%;
+            }
+            #info {
+                font-size: xx-small;
+            }
+
+            .item {
+                margin-left: 35px;
+                margin-right: 0px;
+            }
+        </style>
+
+        <a class="a2" href="[[_getItemURL()]]">
+        <div class="layout">
+            <div class="num">[[_displayIndex(index)]].</div>
+            <div class="item">
+                <div>[[item.title]]</div>
+                <div id="info">[[item.points]] points by [[item.user]]
+                    [[item.time_ago]] | <a href="/list/Comment/[[item.id]]">[[item.comments_count]] comments</a>
+                </div>
+            </div>
+        </div>
+        </a>
+
+    </template>
+    <script>
+        class HackerNewsItem extends Polymer.Element {
+            static get is() {
+                return 'hn-item';
+            }
+
+            static get properties() {
+                return {
+                    item: Object,
+                    index: Number,
+                    data_type: String
+                };
+            }
+
+            _displayIndex(index) {
+                return index + 1;
+            }
+
+            ready() {
+                super.ready();
+                //console.log(this.item);
+                if( this.data_type == 'jobs' ) {
+                    this.$.info.hidden = true;
+                }
+            }
+
+            _getItemURL() {
+                if( this.data_type === "ask" ) {
+                    return "/list/Comment/"+this.item.id;
+                }
+
+                if( this.item.url.startsWith( 'item?id=' ) ) {
+                    return "/list/Item/" + this.item.url.substring(8);
+                }
+                return this.item.url;
+            }
+        }
+
+        window.customElements.define(HackerNewsItem.is, HackerNewsItem);
+    </script>
+</dom-module>

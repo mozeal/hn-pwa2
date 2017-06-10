@@ -1,0 +1,77 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="hn-item.html">
+
+<dom-module id="hn-news">
+    <template>
+        <style>
+            :host {
+                display: block;
+                padding: 0 15px 0 15px;
+            }
+        </style>
+
+        <div class="card">
+            <h2>[[title]]</h2>
+            <div id="loading">Loading...</div>
+            <div id="contents">
+                <dom-repeat items="[[data]]" initial-count="30">
+                    <template>
+                        <hn-item index="[[index]]" item="[[item]]" data_type="[[data_type]]"></hn-item>
+                    </template>
+                </dom-repeat>
+            </div>
+        </div>
+        <iron-ajax
+            auto
+            url="https://api.hackerwebapp.com/[[data_type]]"
+            handle-as="json"
+            on-response="_handleResponse"
+            on-error="_handleError"
+            debounce-duration="300">
+        </iron-ajax>
+    </template>
+
+    <script>
+        class HackerNews extends Polymer.Element {
+            static get is() {
+                return 'hn-news';
+            }
+
+            static get properties() {
+                return {
+                    data_type: {
+                        type: String,
+                        observer: '_dataTypeChanged'
+                    },
+                    title: String,
+                    page_no: {
+                        type: Number,
+                        value: 1
+                    }
+                };
+            }
+
+            _handleResponse( data ) {
+                this.data = data.detail.response;
+                this.$.contents.hidden = false;
+                this.$.loading.hidden = true;
+            }
+
+            _dataTypeChanged( data_type ) {
+                this.$.contents.hidden = true;
+                this.$.loading.hidden = false;
+                this.$.loading.innerHTML="Loading...";
+            }
+
+            _handleError( data ) {
+                console.log( "ERROR" );
+                console.log( data );
+                this.$.loading.innerHTML="(Network ERROR)";
+            }
+        }
+
+        window.customElements.define(HackerNews.is, HackerNews);
+    </script>
+</dom-module>
+

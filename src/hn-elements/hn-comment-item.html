@@ -1,0 +1,60 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="hn-comment-item">
+    <template>
+        <style>
+            :host {
+                display: block;
+                font-size: small;
+            }
+            #layout {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            .info {
+                font-size: x-small;
+                color: grey;
+                margin-bottom: 4px;
+            }
+
+            p {
+                margin: 0 0 6px 0;
+            }
+        </style>
+
+        <div id="layout">
+            <div class="info">[[comment.user]] [[comment.time_ago]]</div>
+            <div id="comment"></div>
+
+            <dom-repeat items="[[comment.comments]]" initial-count="30">
+                <template>
+                    <hn-comment-item comment="[[item]]"></hn-comment-item>
+                </template>
+            </dom-repeat>
+        </div>
+
+    </template>
+    <script>
+        class HackerNewsCommentItem extends Polymer.Element {
+            static get is() {
+                return 'hn-comment-item';
+            }
+
+            static get properties() {
+                return {
+                    comment: {
+                        type: Object,
+                        observer: '_commentChanged'
+                    },
+                };
+            }
+
+            _commentChanged( comment ) {
+                this.$.comment.innerHTML=comment.content;
+                this.$.layout.style['margin-left'] = '30px';
+            }
+        }
+
+        window.customElements.define(HackerNewsCommentItem.is, HackerNewsCommentItem);
+    </script>
+</dom-module>

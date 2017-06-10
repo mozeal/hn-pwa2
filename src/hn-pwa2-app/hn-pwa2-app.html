@@ -1,32 +1,75 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+
+<link rel="import" href="../hn-elements/hn-news.html">
+<link rel="import" href="../my-icons.html">
 
 <dom-module id="hn-pwa2-app">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]!</h2>
-  </template>
+    <template>
+        <style>
+            :host {
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+                display: block;
+            }
 
-  <script>
-    /**
-     * @customElement
-     * @polymer
-     */
-    class HnPwa2App extends Polymer.Element {
-      static get is() { return 'hn-pwa2-app'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'hn-pwa2-app'
-          }
-        };
-      }
-    }
+            app-header {
+                color: #fff;
+                background-color: var(--app-primary-color);
+            }
 
-    window.customElements.define(HnPwa2App.is, HnPwa2App);
-  </script>
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+
+            .title {
+                margin-left: 15px;
+            }
+        </style>
+        <div>Loading...</div>
+        <app-header-layout has-scrolling-region>
+            <app-header condenses reveals>
+                <app-toolbar>
+                    <iron-icon icon="my-icons:bookmark" drawer-toggle></iron-icon>
+                    <div class="title" main-title>[[ title ]]</div>
+                    <paper-tabs selected="0">
+                        <paper-tab>Top Stories</paper-tab>
+                        <paper-tab>New</paper-tab>
+                        <paper-tab>Show</paper-tab>
+                        <paper-tab>Ask</paper-tab>
+                        <paper-tab>Jobs</paper-tab>
+                    </paper-tabs>
+                </app-toolbar>
+            </app-header>
+            <hn-news data_type="news" title="Top Stories"></hn-news>
+        </app-header-layout>
+    </template>
+
+    <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class HnPwa2App extends Polymer.Element {
+            static get is() {
+                return 'hn-pwa2-app';
+            }
+
+            static get properties() {
+                return {
+                    title: {
+                        type: String,
+                        value: 'HN-PWA2',
+                        reflectToAttribute: true
+                    }
+                };
+            }
+        }
+
+        window.customElements.define(HnPwa2App.is, HnPwa2App);
+    </script>
 </dom-module>

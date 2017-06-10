@@ -1,0 +1,98 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="hn-item.html">
+<link rel="import" href="hn-comment-item.html">
+
+<dom-module id="hn-comments">
+    <template>
+        <style>
+            :host {
+                display: block;
+                padding: 0 15px 0 15px;
+            }
+
+            .info {
+                font-size: xx-small;
+            }
+
+            .item {
+                margin: 0 0 15px 0;
+            }
+        </style>
+        <h2>Comments</h2>
+        <div id="loading">
+            Loading...
+        </div>
+        <div id="comment">
+            <div class="item">
+                <div>[[item.title]]</div>
+                <div class="info">[[item.points]] points by [[item.user]]
+                    [[item.time_ago]] | [[item.comments_count]] comments
+                </div>
+            </div>
+            <div id="item_content">
+            </div>
+
+            <div class="comments">
+                <dom-repeat items="[[item.comments]]" initial-count="30">
+                    <template>
+                        <hn-comment-item comment="[[item]]"></hn-comment-item>
+                    </template>
+                </dom-repeat>
+            </div>
+        </div>
+        <iron-ajax
+                auto
+                url="https://api.hackerwebapp.com/item/[[item_id]]"
+                handle-as="json"
+                on-response="_handleResponse"
+                on-error="_handleError"
+                debounce-duration="300">
+        </iron-ajax>
+    </template>
+
+    <script>
+        class HackerNewsComments extends Polymer.Element {
+            static get is() {
+                return 'hn-comments';
+            }
+
+            static get properties() {
+                return {
+                    item_id: {
+                        type: Object,
+                        observer: '_itemIDChanged',
+                    }
+                };
+            }
+
+            _handleResponse(data) {
+                this.item = data.detail.response;
+                this.$.comment.hidden = false;
+                this.$.item_content.hidden = false;
+                this.$.loading.hidden = true;
+                console.log( this.item );
+                if( this.item.content )
+                    this.$.item_content.innerHTML = this.item.content;
+            }
+
+            _itemIDChanged(itemID) {
+                this.$.comment.hidden = true;
+                this.$.item_content.hidden = true;
+                this.$.loading.hidden = false;
+                this.$.loading.innerHTML="Loading...";
+                this.$.item_content.innerHTML = "";
+            }
+
+            _handleError( data ) {
+                console.log( "ERROR" );
+                console.log( data );
+                this.$.loading.innerHTML="(Network ERROR)";
+            }
+
+        }
+
+        window.customElements.define(HackerNewsComments.is, HackerNewsComments);
+    </script>
+</dom-module>
+

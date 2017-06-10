@@ -15,11 +15,16 @@
 # limitations under the License.
 #
 import webapp2
+import re
+import logging
 
-class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write('Hello world!')
+
+class MainPage(webapp2.RequestHandler):
+    def get(self, **kwargs):
+        self.response.out.write(open('index.html').read())
+
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    webapp2.Route('/', handler=MainPage),
+    webapp2.Route('/index.html', handler=MainPage)
 ], debug=True)
