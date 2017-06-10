@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="hn-pwa2-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class HnPwa2App extends Polymer.Element {
+      static get is() { return 'hn-pwa2-app'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'hn-pwa2-app'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(HnPwa2App.is, HnPwa2App);
+  </script>
+</dom-module>

@@ -4,3 +4,5 @@ appengine-generated/
 *.pyc
 
 .idea/
+
+bower_components/

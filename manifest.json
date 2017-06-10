@@ -1,0 +1,7 @@
+{
+  "name": "hn-pwa2",
+  "short_name": "hn-pwa2",
+  "description": "hn-pwa version 2",
+  "start_url": "/",
+  "display": "standalone"
+}
